@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Love!</title>
+    <style>
+        :root {
+            --pink-light: #ffe6f2;
+            --pink-medium: #ffb6d9;
+            --pink-dark: #ff8ac5;
+            --pixel-size: 6px;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: var(--pink-light);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        
+        .pixel-border {
+            border-style: solid;
+            border-width: var(--pixel-size);
+            border-image: linear-gradient(to right, var(--pink-dark) 25%, var(--pink-medium) 25%, var(--pink-medium) 50%, var(--pink-dark) 50%, var(--pink-dark) 75%, var(--pink-medium) 75%) 5;
+            border-image-slice: 5;
+            border-image-repeat: repeat;
+            padding: 15px;
+            margin: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 3px 3px 0 var(--pink-medium);
+        }
+        
+        .pixel-heart {
+            width: 64px;
+            height: 64px;
+            margin: 20px auto;
+            position: relative;
+            background-color: transparent;
+        }
+        
+        .pixel {
+            position: absolute;
+            width: var(--pixel-size);
+            height: var(--pixel-size);
+            background-color: var(--pink-dark);
+        }
+        
+        /* Pixel heart pattern */
+        .p1 { top: 0; left: 12px; }
+        .p2 { top: 0; left: 18px; }
+        .p3 { top: 0; left: 36px; }
+        .p4 { top: 0; left: 42px; }
+        .p5 { top: 6px; left: 6px; }
+        .p6 { top: 6px; left: 12px; }
+        .p7 { top: 6px; left: 18px; }
+        .p8 { top: 6px; left: 24px; }
+        .p9 { top: 6px; left: 30px; }
+        .p10 { top: 6px; left: 36px; }
+        .p11 { top: 6px; left: 42px; }
+        .p12 { top: 6px; left: 48px; }
+        .p13 { top: 12px; left: 6px; }
+        .p14 { top: 12px; left: 12px; }
+        .p15 { top: 12px; left: 18px; }
+        .p16 { top: 12px; left: 24px; }
+        .p17 { top: 12px; left: 30px; }
+        .p18 { top: 12px; left: 36px; }
+        .p19 { top: 12px; left: 42px; }
+        .p20 { top: 12px; left: 48px; }
+        .p21 { top: 18px; left: 12px; }
+        .p22 { top: 18px; left: 18px; }
+        .p23 { top: 18px; left: 24px; }
+        .p24 { top: 18px; left: 30px; }
+        .p25 { top: 18px; left: 36px; }
+        .p26 { top: 18px; left: 42px; }
+        .p27 { top: 24px; left: 18px; }
+        .p28 { top: 24px; left: 24px; }
+        .p29 { top: 24px; left: 30px; }
+        .p30 { top: 24px; left: 36px; }
+        .p31 { top: 30px; left: 24px; }
+        .p32 { top: 30px; left: 30px; }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            text-shadow: 2px 2px 0 var(--pink-medium);
+        }
+        
+        .memories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 30px;
+        }
+        
+        .memory-card {
+            background-color: white;
+            box-shadow: 8px 8px 0 var(--pink-medium);
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .memory-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Modal for full-size image view */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            padding-top: 20px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 95%;
+            max-height: 95%;
+        }
+        
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: var(--pink-medium);
+        }
+        
+        .memory-card img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+            margin-bottom: 10px;
+            image-rendering: pixelated;
+            border: 4px solid var(--pink-dark);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .memory-card img:hover {
+            transform: scale(1.03);
+        }
+        
+        .memory-card h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+        
+        .memory-card p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+        
+        .message {
+            text-align: center;
+            padding: 30px;
+            background-color: white;
+            box-shadow: 10px 10px 0 var(--pink-medium);
+            margin: 40px auto;
+            max-width: 700px;
+        }
+        
+        .message h2 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            color: var(--pink-dark);
+        }
+        
+        .pixel-cake {
+            width: 80px;
+            height: 80px;
+            margin: 20px auto;
+            position: relative;
+        }
+        
+        .pixel-cake .pixel {
+            background-color: #ff66b3;
+        }
+        
+        .pixel-cake .candle {
+            background-color: #ffcc00;
+        }
+        
+        .pixel-cake .flame {
+            background-color: #ff9900;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            margin-top: 40px;
+        }
+        
+        /* Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .pixel-heart {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Upload button */
+        .upload-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        #upload-btn {
+            background-color: var(--pink-dark);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #upload-btn:hover {
+            background-color: #ff66b3;
+            transform: translateY(-2px);
+        }
+        
+        /* Custom Message */
+        .message-edit {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        #message-text {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            border: 3px solid var(--pink-medium);
+            margin-bottom: 10px;
+        }
+        
+        #save-message {
+            background-color: var(--pink-dark);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="fullSizeImage">
+    </div>
+
+    <div class="container">
+        <header class="pixel-border">
+            <h1>Happy Birthday!</h1>
+            <div class="pixel-heart">
+                <div class="pixel p1"></div>
+                <div class="pixel p2"></div>
+                <div class="pixel p3"></div>
+                <div class="pixel p4"></div>
+                <div class="pixel p5"></div>
+                <div class="pixel p6"></div>
+                <div class="pixel p7"></div>
+                <div class="pixel p8"></div>
+                <div class="pixel p9"></div>
+                <div class="pixel p10"></div>
+                <div class="pixel p11"></div>
+                <div class="pixel p12"></div>
+                <div class="pixel p13"></div>
+                <div class="pixel p14"></div>
+                <div class="pixel p15"></div>
+                <div class="pixel p16"></div>
+                <div class="pixel p17"></div>
+                <div class="pixel p18"></div>
+                <div class="pixel p19"></div>
+                <div class="pixel p20"></div>
+                <div class="pixel p21"></div>
+                <div class="pixel p22"></div>
+                <div class="pixel p23"></div>
+                <div class="pixel p24"></div>
+                <div class="pixel p25"></div>
+                <div class="pixel p26"></div>
+                <div class="pixel p27"></div>
+                <div class="pixel p28"></div>
+                <div class="pixel p29"></div>
+                <div class="pixel p30"></div>
+                <div class="pixel p31"></div>
+                <div class="pixel p32"></div>
+            </div>
+        </header>
+
+        <div class="section message">
+            <h2>To My Amazing Girlfriend</h2>
+
+            <p id="birthday-message">Happy Birthday, Baby! Birthday mo ngayon, bukas hindi na.</p>
+            <p id="birthday-message">Welcome to the early stage of adulting no more teenage years na😢</p>
+            <p id="birthday-message">I am so proud of you for all that you have accomplished this year.</p>
+            <p id="birthday-message">I love you so much! I hope you have a great day today and I wish you all the best in life.</p>
+            <p id="birthday-message">I am so grateful to have you in my life. You are the best thing that ever happened to me. ❤️</p>
+        
+            
+            <div class="pixel-cake">
+                <div class="pixel" style="top: 48px; left: 12px;"></div>
+                <div class="pixel" style="top: 48px; left: 18px;"></div>
+                <div class="pixel" style="top: 48px; left: 24px;"></div>
+                <div class="pixel" style="top: 48px; left: 30px;"></div>
+                <div class="pixel" style="top: 48px; left: 36px;"></div>
+                <div class="pixel" style="top: 48px; left: 42px;"></div>
+                <div class="pixel" style="top: 48px; left: 48px;"></div>
+                <div class="pixel" style="top: 48px; left: 54px;"></div>
+                <div class="pixel" style="top: 54px; left: 6px;"></div>
+                <div class="pixel" style="top: 54px; left: 12px;"></div>
+                <div class="pixel" style="top: 54px; left: 18px;"></div>
+                <div class="pixel" style="top: 54px; left: 24px;"></div>
+                <div class="pixel" style="top: 54px; left: 30px;"></div>
+                <div class="pixel" style="top: 54px; left: 36px;"></div>
+                <div class="pixel" style="top: 54px; left: 42px;"></div>
+                <div class="pixel" style="top: 54px; left: 48px;"></div>
+                <div class="pixel" style="top: 54px; left: 54px;"></div>
+                <div class="pixel" style="top: 54px; left: 60px;"></div>
+                <div class="pixel" style="top: 60px; left: 6px;"></div>
+                <div class="pixel" style="top: 60px; left: 12px;"></div>
+                <div class="pixel" style="top: 60px; left: 18px;"></div>
+                <div class="pixel" style="top: 60px; left: 24px;"></div>
+                <div class="pixel" style="top: 60px; left: 30px;"></div>
+                <div class="pixel" style="top: 60px; left: 36px;"></div>
+                <div class="pixel" style="top: 60px; left: 42px;"></div>
+                <div class="pixel" style="top: 60px; left: 48px;"></div>
+                <div class="pixel" style="top: 60px; left: 54px;"></div>
+                <div class="pixel" style="top: 60px; left: 60px;"></div>
+                <div class="pixel candle" style="top: 30px; left: 24px;"></div>
+                <div class="pixel candle" style="top: 36px; left: 24px;"></div>
+                <div class="pixel candle" style="top: 42px; left: 24px;"></div>
+                <div class="pixel flame" style="top: 24px; left: 24px;"></div>
+            </div>
+        </div>
+
+        <div class="upload-container">
+            <input type="file" id="file-input" accept="image/*" multiple style="display: none;">
+            <button id="upload-btn">Add Your Photos</button>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Our Beautiful Memories</h2>
+            <div class="memories" id="memories-container">
+                <!-- Sample memories - these will be replaced with uploaded photos -->
+                <div class="memory-card">
+                    <img src="/img/nov.jpeg" alt="Memory placeholder" class="portrait" onclick="openModal(this.src)">
+                    <h3>November</h3>
+                    <p>Imagine kung hindi malakas guardian angel mo siguro kwento ka nalang ngayon, nakikipag kita ka sa hindi mo kilala. Isusumbong kita sa mommy mo.</p>
+                </div>
+                <div class="memory-card">
+                    <img src="/img/dec.jpeg" alt="Memory placeholder" onclick="openModal(this.src)">
+                    <h3>December</h3>
+                    <p>First photo natin na may hardcopy from Timezone. First kiss din natin hehe, ikaw ha! 2nd date palang may pabaon na kiss kana agad.</p>
+                </div>
+                <div class="memory-card">
+                    <img src="/img/1.jpg" alt="Memory placeholder" onclick="openModal(this.src)">
+                    <h3>January</h3>
+                    <p>Paper rings made from receipt ni Coco. Inaka Bem's natrauma ako sa nashville niyo. First Life 4 Cuts din natin to and eto din yung dinala mo ako sa fire exit. ikaw, talaga ha!.
+                        Next na ring na isusuot mo engangement ring na.🥰
+                    </p>
+                </div>
+                <div class="memory-card">
+                    <img src="/img/feb.jpeg" alt="Memory placeholder" onclick="openModal(this.src)">
+                    <h3>February</h3>
+                    <p>First time natin iceleberate Valentines and early pa. 😅 Cute mo dito baby and thank you sa chocolate. 😋 
+                        Balik tayo dun sa Sumu sarap ng potato wedges nila and Beef salpicao hehe.
+                    </p>
+                </div>
+                <div class="memory-card">
+                    <img src="/img/3.jpeg" alt="Memory placeholder" onclick="openModal(this.src)">
+                    <h3>March</h3>
+                    <p>For me eto yung pinaka cute na date na we had. Wala lang sobrang saya ko that day and super nag enjoy ako dun sa 
+                        serenitea, tuwang tuwa siguro mga employee dun kitang kita tayo na nagtutukaan sa cctv.
+                    </p>
+                </div>
+                <div class="memory-card">
+                    <img src="/img/5.jpeg" alt="Memory placeholder" onclick="openModal(this.src)">
+                    <h3>April</h3>
+                    <p>Current favorite pic ko, wala lang ang cute natin dito e and alam mo ba
+                       habang tinatype ko to playing yung night changes sa spotify. I love you so much Mira 
+                        
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="pixel-border">
+            <p>Made with love for your special day ❤️</p>
+            <p id="current-date"></p>
+        </footer>
+    </div>
+
+    <script>
+        // Set current date in footer
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString();
+    
+        // Handle file uploads
+        document.getElementById('upload-btn').addEventListener('click', function() {
+            document.getElementById('file-input').click();
+        });
+    
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const container = document.getElementById('memories-container');
+    
+            // Clear sample memories on first upload
+            if (files.length > 0 && container.querySelector('.memory-card')) {
+                container.innerHTML = '';
+            }
+    
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (!file.type.match('image.*')) continue;
+    
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const card = document.createElement('div');
+                    card.className = 'memory-card';
+    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'Uploaded memory';
+                    img.style.height = '350px';
+                    img.style.objectFit = 'cover';
+                    img.onclick = function() {
+                        openModal(this.src);
+                    };
+    
+                    // Check if image is portrait and add class if needed
+                    const tempImg = new Image();
+                    tempImg.onload = function() {
+                        if (this.height > this.width * 1.5) {
+                            img.classList.add('portrait');
+                        }
+                    };
+                    tempImg.src = e.target.result;
+    
+                    const title = document.createElement('h3');
+                    title.textContent = 'Our Memory';
+                    title.contentEditable = true;
+    
+                    const desc = document.createElement('p');
+                    desc.textContent = 'Click to edit this description...';
+                    desc.contentEditable = true;
+    
+                    card.appendChild(img);
+                    card.appendChild(title);
+                    card.appendChild(desc);
+                    container.appendChild(card);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    
+        // Define openModal function
+        function openModal(img) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('fullSizeImage');
+            modal.style.display = 'block';
+            modalImg.src = img;
+        }
+    
+        // Close modal when clicking the 'x'
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('imageModal').style.display = 'none';
+        };
+    
+        // Optional: Close modal when clicking outside the image
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
+    
+</body>
+</html>
